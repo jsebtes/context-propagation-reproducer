@@ -1,6 +1,6 @@
 package org.acme;
 
-import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Uni;
 import org.acme.context.MyContext;
 import org.jboss.resteasy.reactive.RestHeader;
 
@@ -15,13 +15,12 @@ public class ReactiveGreetingResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String hello(@RestHeader("myValue") String myValue) {
-        return helloInternal(myValue);
+    public Uni<String> hello(@RestHeader("myValue") String myValue) {
+        return Uni.createFrom().item(helloInternal(myValue));
     }
 
     @GET
     @Path("/blocking")
-    @Blocking
     @Produces(MediaType.TEXT_PLAIN)
     public String helloBlocking(@RestHeader("myValue") String myValue) {
         return helloInternal(myValue);
